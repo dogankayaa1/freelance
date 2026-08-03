@@ -10,7 +10,7 @@
             <p class="page-subtitle">Hesap, güvenlik ve tercihlerinizi yönetin.</p>
 
             <div class="action-buttons">
-                <button class="btn btn-primary-custom"><i class="fa-solid fa-download"></i> Rapor İndir</button>
+                <button class="btn btn-premium"><i class="fa-solid fa-download"></i> Rapor İndir</button>
                 <button class="btn btn-secondary"
                     style="border: 1px solid var(--border-light); background-color: transparent; color: var(--text-dark); border-radius: 6px; padding: 0.5rem 1rem; font-weight: 500;"><i
                         class="fa-solid fa-filter"></i> Filtrele</button>
@@ -31,7 +31,7 @@
 
         <!-- Profile Section -->
         <div id="profile" class="settings-section active">
-            <div class="card-clean">
+            <div class="bento-card">
                 <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem;">Profil
                     Bilgileri</h3>
 
@@ -111,7 +111,7 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons-save">
-                        <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-check"></i>
+                        <button type="submit" class="btn btn-premium"><i class="fa-solid fa-check"></i>
                             Kaydet</button>
                         <button type="reset" class="btn btn-secondary"
                             style="border: 1px solid var(--border-light); background-color: transparent; color: var(--text-dark); border-radius: 6px; padding: 0.5rem 1rem; font-weight: 500;"><i
@@ -123,7 +123,7 @@
 
         <!-- Security Section -->
         <div id="security" class="settings-section">
-            <div class="card-clean">
+            <div class="bento-card">
                 <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem;">Güvenlik
                     Ayarları</h3>
 
@@ -134,7 +134,7 @@
                             <div class="security-title"><i class="fa-solid fa-key"></i> Şifre Değiştir</div>
                             <div class="security-desc">Hesap şifrenizi güncelleyin ve daha güvenli hale getirin.</div>
                         </div>
-                        <button class="btn btn-primary-custom" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i
+                        <button class="btn btn-premium" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i
                                 class="fa-solid fa-pen"></i></button>
                     </div>
 
@@ -179,13 +179,13 @@
                             <div class="security-desc">Tüm 2FA yedeklerini ve şifreleri güvenli bir yerde saklayın.
                             </div>
                         </div>
-                        <button class="btn btn-primary-custom" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i
+                        <button class="btn btn-premium" style="padding: 0.5rem 1rem; font-size: 0.875rem;"><i
                                 class="fa-solid fa-download"></i></button>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="action-buttons-save">
-                        <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-check"></i>
+                        <button type="submit" class="btn btn-premium"><i class="fa-solid fa-check"></i>
                             Kaydet</button>
                     </div>
                 </div>
@@ -194,7 +194,7 @@
 
         <!-- Notifications Section -->
         <div id="notifications" class="settings-section">
-            <div class="card-clean">
+            <div class="bento-card">
                 <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem;">Bildirim
                     Tercihleri</h3>
 
@@ -299,7 +299,7 @@
 
                     <!-- Action Buttons -->
                     <div class="action-buttons-save">
-                        <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-check"></i>
+                        <button type="submit" class="btn btn-premium"><i class="fa-solid fa-check"></i>
                             Kaydet</button>
                     </div>
                 </div>
@@ -308,7 +308,7 @@
 
         <!-- Preferences Section -->
         <div id="preferences" class="settings-section">
-            <div class="card-clean">
+            <div class="bento-card">
                 <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 1.5rem;">Uygulama
                     Tercihleri</h3>
 
@@ -389,7 +389,7 @@
 
                 <!-- Action Buttons -->
                 <div class="action-buttons-save">
-                    <button type="submit" class="btn btn-primary-custom"><i class="fa-solid fa-check"></i>
+                    <button type="submit" class="btn btn-premium"><i class="fa-solid fa-check"></i>
                         Kaydet</button>
                 </div>
             </div>

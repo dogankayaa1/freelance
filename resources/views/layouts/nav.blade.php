@@ -23,15 +23,15 @@
             <i class="fa-solid fa-layer-group"></i> BizDev Panel
         </div>
         <div class="nav-menu">
-            <a href="/admin" class="nav-item-custom active"><i class="fa-solid fa-house"></i> Kontrol Paneli</a>
-            <a href="/musteri" class="nav-item-custom"><i class="fa-solid fa-address-book"></i> Müşteri Rehberi</a>
-            <a href="/proje" class="nav-item-custom"><i class="fa-solid fa-folder-open"></i> Proje Yönetimi</a>
-            <a href="/teklifler" class="nav-item-custom"><i class="fa-solid fa-file-signature"></i> Teklifler</a>
-            <a href="/finans" class="nav-item-custom"><i class="fa-solid fa-chart-line"></i> Finans Raporları</a>
-            <a href="/ayarlar" class="nav-item-custom"><i class="fa-solid fa-gear"></i> Ayarlar</a>
+            <a href="/admin" class="nav-item-custom {{ Request::is('admin*') ? 'active' : '' }}"><i class="fa-solid fa-house"></i> Kontrol Paneli</a>
+            <a href="/musteri" class="nav-item-custom {{ Request::is('musteri*') ? 'active' : '' }}"><i class="fa-solid fa-address-book"></i> Müşteri Rehberi</a>
+            <a href="/proje" class="nav-item-custom {{ Request::is('proje*') ? 'active' : '' }}"><i class="fa-solid fa-folder-open"></i> Proje Yönetimi</a>
+            <a href="/teklifler" class="nav-item-custom {{ Request::is('teklifler*') ? 'active' : '' }}"><i class="fa-solid fa-file-signature"></i> Teklifler</a>
+            <a href="/finans" class="nav-item-custom {{ Request::is('finans*') ? 'active' : '' }}"><i class="fa-solid fa-chart-line"></i> Finans Raporları</a>
+            <a href="/ayarlar" class="nav-item-custom {{ Request::is('ayarlar*') ? 'active' : '' }}"><i class="fa-solid fa-gear"></i> Ayarlar</a>
             <form method="POST" action="{{ route('logout') }}">
-    @csrf
-            <button type="submit" class="nav-item-custom" style="color: #dc3545; border: none; background: none; padding: 0;"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
+            @csrf
+            <button type="submit" class="nav-item-custom px-3 mt-4" style="color: #dc3545; border: none; background: none; padding: 0;"><i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</button>
             </form>
 
         </div>

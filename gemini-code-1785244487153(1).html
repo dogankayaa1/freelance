@@ -85,7 +85,7 @@
                     <li class="nav-item"><a class="nav-link" href="#project-status"><i
                                 class="fa-solid fa-circle-info me-2"></i>Proje Durumu</a></li>
                     <li class="nav-item"><a class="nav-link" href="#file-map"><i
-                                class="fa-solid fa-folder-tree me-2"></i>Dosya Haritasi</a></li>
+                                class="fa-solid fa-folder-tree me-2"></i>Dosya Haritası</a></li>
                     <li class="nav-item"><a class="nav-link active" href="#sec-1"><i
                                 class="fa-solid fa-download me-2"></i>1. Kurulum</a></li>
                     <li class="nav-item"><a class="nav-link" href="#sec-2"><i class="fa-solid fa-gear me-2"></i>2.
@@ -176,7 +176,7 @@ Route::middleware('auth')-&gt;get('/dashboard', function () {
     return view('dashboard');
 })-&gt;name('dashboard');</code></pre>
                     <p><code>config/fortify.php</code> dosyanızda şu özellikler aktif: kayıt, şifre sıfırlama,
-                        profil/sifre güncelleme, iki faktörlü doğrulama ve passkey. E-posta doğrulaması kapalıdır.</p>
+                        profil/şifre güncelleme, iki faktörlü doğrulama ve passkey. E-posta doğrulaması kapalıdır.</p>
                 </section>
 
                 <section id="file-map" class="content-section">
@@ -1382,7 +1382,7 @@ Route::delete('/kategori/{id}', [CategoryController::class, 'destroy'])->name('c
                 </tr>
                 <tr>
                     <td><code>$table->tinyInteger('durum');</code></td>
-                    <td>Küçük tam sayılar (0-255 / enayi tipler).</td>
+                    <td>Küçük tam sayılar (0-255 / durum ve bayrak tipleri).</td>
                     <td><code>'durum' => 'required|integer|between:0,255'</code></td>
                 </tr>
                 <tr>
@@ -1617,7 +1617,7 @@ class UrunController extends Controller
     <div class="alert alert-info mt-3">
         <strong>İpucu:</strong> Sayfalandırılmış nesne üzerinde kullanabileceğin yararlı metotlar:
         <ul class="mb-0 mt-2">
-            <li><code>$getir->total()</code>: Toplam toplam kayıt sayısını döner.</li>
+            <li><code>$getir->total()</code>: Toplam kayıt sayısını döner.</li>
             <li><code>$getir->firstItem()</code>: Mevcut sayfadaki ilk kaydın sıra numarasını verir.</li>
             <li><code>$getir->lastItem()</code>: Mevcut sayfadaki son kaydın sıra numarasını verir.</li>
             <li><code>$getir->links()</code>: Sayfa geçiş butonlarının HTML kodunu üretir.</li>

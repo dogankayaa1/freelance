@@ -21,7 +21,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="stat-label mb-1">Toplam Müşteri</p>
-                            <h4 class="mb-0 fw-bold text-dark">24</h4>
+                            <h4 class="mb-0 fw-bold text-dark">{{ $toplamMusteri ?? 0 }}</h4>
                         </div>
                         <div class="bg-light-info rounded p-3">
                             <i class="fa-solid fa-users fa-lg"></i>
@@ -34,7 +34,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="stat-label mb-1">Aktif Müşteriler</p>
-                            <h4 class="mb-0 fw-bold text-dark">22</h4>
+                            <h4 class="mb-0 fw-bold text-dark">{{ $aktifMusteriler ?? 0 }}</h4>
                         </div>
                         <div class="bg-light-success rounded p-3">
                             <i class="fa-solid fa-check-circle fa-lg"></i>
@@ -47,7 +47,7 @@
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <p class="stat-label mb-1">Yeni Müşteriler</p>
-                            <h4 class="mb-0 fw-bold text-dark">5</h4>
+                            <h4 class="mb-0 fw-bold text-dark">{{ $yeniMusteriler ?? 0 }}</h4>
                         </div>
                         <div class="bg-light-warning rounded p-3">
                             <i class="fa-solid fa-user-plus fa-lg"></i>
@@ -111,78 +111,49 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr data-id="1024">
-                            <td>#1024</td>
-                            <td><strong>Ahmet Yılmaz</strong></td>
-                            <td>ahmet.yilmaz@email.com</td>
-                            <td>+90 532 123 4567</td>
-                            <td><span class="badge-glass">Aktif</span></td>
-                            <td>12/05/2024</td>
+                        @forelse($musteriler as $musteri)
+                        <tr data-id="{{ $musteri->id }}">
+                            <td>#{{ $musteri->id }}</td>
+                            <td><strong>{{ $musteri->ad }} {{ $musteri->soyad }}</strong></td>
+                            <td>{{ $musteri->email }}</td>
+                            <td>{{ $musteri->telefon ?? '-' }}</td>
+                            <td>
+                                @if($musteri->durum == 'active')
+                                    <span class="badge-glass bg-success">Aktif</span>
+                                @elseif($musteri->durum == 'pending')
+                                    <span class="badge-glass bg-warning">Beklemede</span>
+                                @else
+                                    <span class="badge-glass bg-secondary">Pasif</span>
+                                @endif
+                            </td>
+                            <td>{{ $musteri->created_at->format('d/m/Y') }}</td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewCustomerModal" title="Görüntüle"><i
-                                            class="fa-solid fa-eye"></i></button>
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#editCustomerModal" title="Düzenle"><i
-                                            class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" title="Sil"><i
-                                            class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewCustomerModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
+                                    <button class="btn btn-sm btn-outline-secondary edit-customer-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editCustomerModal" 
+                                        data-id="{{ $musteri->id }}"
+                                        data-ad="{{ $musteri->ad }}"
+                                        data-soyad="{{ $musteri->soyad }}"
+                                        data-email="{{ $musteri->email }}"
+                                        data-telefon="{{ $musteri->telefon }}"
+                                        data-sirket="{{ $musteri->sirket }}"
+                                        data-durum="{{ $musteri->durum }}"
+                                        title="Düzenle"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger delete-customer-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#deleteConfirmModal" 
+                                        data-id="{{ $musteri->id }}"
+                                        title="Sil"><i class="fa-solid fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
-                        <tr data-id="1025">
-                            <td>#1025</td>
-                            <td><strong>Ayşe Demir</strong></td>
-                            <td>ayse.demir@email.com</td>
-                            <td>+90 534 765 4321</td>
-                            <td><span class="badge-glass">Aktif</span></td>
-                            <td>15/05/2024</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-outline-primary"><i
-                                            class="fa-solid fa-eye"></i></button>
-                                    <button class="btn btn-sm btn-outline-secondary"><i
-                                            class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger"><i
-                                            class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Henüz müşteri bulunmuyor.</td>
                         </tr>
-                        <tr data-id="1026">
-                            <td>#1026</td>
-                            <td><strong>Mehmet Kaya</strong></td>
-                            <td>mehmet.kaya@email.com</td>
-                            <td>+90 538 987 6543</td>
-                            <td><span class="badge-glass">Beklemede</span></td>
-                            <td>18/05/2024</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-outline-primary"><i
-                                            class="fa-solid fa-eye"></i></button>
-                                    <button class="btn btn-sm btn-outline-secondary"><i
-                                            class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger"><i
-                                            class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr data-id="1027">
-                            <td>#1027</td>
-                            <td><strong>Fatma Şahin</strong></td>
-                            <td>fatma.sahin@email.com</td>
-                            <td>+90 536 456 7890</td>
-                            <td><span class="badge-glass">Aktif</span></td>
-                            <td>20/05/2024</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button class="btn btn-sm btn-outline-primary"><i
-                                            class="fa-solid fa-eye"></i></button>
-                                    <button class="btn btn-sm btn-outline-secondary"><i
-                                            class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger"><i
-                                            class="fa-solid fa-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -217,32 +188,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form id="addCustomerForm">
+                    <form id="addCustomerForm" action="{{ route('musteri.store') }}" method="POST">
+                        @csrf
                         <div class="bento-grid mb-3">
                             <div class="col-span-6">
                                 <label for="firstName" class="form-label">Ad</label>
-                                <input type="text" class="form-control" id="firstName" required>
+                                <input type="text" class="form-control" id="firstName" name="ad" required>
                             </div>
                             <div class="col-span-6">
                                 <label for="lastName" class="form-label">Soyad</label>
-                                <input type="text" class="form-control" id="lastName" required>
+                                <input type="text" class="form-control" id="lastName" name="soyad" required>
                             </div>
                         </div>
                         <div class="bento-grid mb-3">
                             <div class="col-span-8">
                                 <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
+                                <input type="email" class="form-control" id="email" name="email" required>
                             </div>
                             <div class="col-span-4">
                                 <label for="phone" class="form-label">Telefon</label>
-                                <input type="tel" class="form-control" id="phone">
+                                <input type="tel" class="form-control" id="phone" name="telefon">
                             </div>
                         </div>
                         <div class="bento-grid mb-3">
                             <div class="col-span-12">
-                                <label for="company" class="form-label">Şirket
-                                    (Opsiyonel)</label>
-                                <input type="text" class="form-control" id="company">
+                                <label for="company" class="form-label">Şirket (Opsiyonel)</label>
+                                <input type="text" class="form-control" id="company" name="sirket">
                             </div>
                         </div>
                     </form>
@@ -285,26 +256,41 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <form id="editCustomerForm">
-                        <input type="hidden" id="editCustomerId">
+                    <form id="editCustomerForm" method="POST">
+                        @csrf
+                        @method('PUT')
                         <div class="bento-grid mb-3">
                             <div class="col-span-6">
                                 <label for="editFirstName" class="form-label">Ad</label>
-                                <input type="text" class="form-control" id="editFirstName" required>
+                                <input type="text" class="form-control" id="editFirstName" name="ad" required>
                             </div>
                             <div class="col-span-6">
                                 <label for="editLastName" class="form-label">Soyad</label>
-                                <input type="text" class="form-control" id="editLastName" required>
+                                <input type="text" class="form-control" id="editLastName" name="soyad" required>
                             </div>
                         </div>
                         <div class="bento-grid mb-3">
                             <div class="col-span-8">
                                 <label for="editEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="editEmail" required>
+                                <input type="email" class="form-control" id="editEmail" name="email" required>
                             </div>
                             <div class="col-span-4">
                                 <label for="editPhone" class="form-label">Telefon</label>
-                                <input type="tel" class="form-control" id="editPhone">
+                                <input type="tel" class="form-control" id="editPhone" name="telefon">
+                            </div>
+                        </div>
+                        <div class="bento-grid mb-3">
+                            <div class="col-span-6">
+                                <label for="editSirket" class="form-label">Şirket (Opsiyonel)</label>
+                                <input type="text" class="form-control" id="editSirket" name="sirket">
+                            </div>
+                            <div class="col-span-6">
+                                <label for="editDurum" class="form-label">Durum</label>
+                                <select class="form-select" id="editDurum" name="durum" required>
+                                    <option value="active">Aktif</option>
+                                    <option value="pending">Beklemede</option>
+                                    <option value="inactive">Pasif</option>
+                                </select>
                             </div>
                         </div>
                     </form>
@@ -331,7 +317,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary me-auto" data-bs-dismiss="modal">İptal</button>
-                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger" data-bs-dismiss="modal">Sil</button>
+                    <form id="deleteCustomerForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -416,51 +406,47 @@
             });
 
             // Edit Modal - Populate
-            document.querySelectorAll('.btn-outline-secondary').forEach(btn => {
+            document.querySelectorAll('.edit-customer-btn').forEach(btn => {
                 btn.addEventListener('click', function (e) {
-                    const row = this.closest('tr');
-                    const nameCell = row.querySelector('td:nth-child(2) strong').textContent;
-                    const parts = nameCell.split(' ');
-                    document.getElementById('editFirstName').value = parts[0] || '';
-                    document.getElementById('editLastName').value = parts.slice(1).join(' ') || '';
-                    document.getElementById('editEmail').value = row.querySelector('td:nth-child(3)').textContent;
-                    document.getElementById('editPhone').value = row.querySelector('td:nth-child(4)').textContent;
+                    const id = this.dataset.id;
+                    const ad = this.dataset.ad;
+                    const soyad = this.dataset.soyad;
+                    const email = this.dataset.email;
+                    const telefon = this.dataset.telefon;
+                    const sirket = this.dataset.sirket;
+                    const durum = this.dataset.durum;
+
+                    const form = document.getElementById('editCustomerForm');
+                    form.action = `/musteri/${id}`;
+                    
+                    document.getElementById('editFirstName').value = ad || '';
+                    document.getElementById('editLastName').value = soyad || '';
+                    document.getElementById('editEmail').value = email || '';
+                    document.getElementById('editPhone').value = telefon || '';
+                    document.getElementById('editSirket').value = sirket || '';
+                    document.getElementById('editDurum').value = durum || 'active';
                 });
             });
 
             // Delete Confirmation Modal Trigger
-            document.querySelectorAll('.btn-outline-danger').forEach(btn => {
+            document.querySelectorAll('.delete-customer-btn').forEach(btn => {
                 btn.addEventListener('click', function (e) {
-                    const row = this.closest('tr');
-                    if (!row) return;
-
-                    const idCell = row.querySelector('td:nth-child(1)').textContent.replace('#', '');
-                    const confirmBtn = document.getElementById('confirmDeleteBtn');
-                    if(confirmBtn) {
-                        confirmBtn.dataset.customerId = idCell;
+                    const id = this.dataset.id;
+                    const form = document.getElementById('deleteCustomerForm');
+                    if (form) {
+                        form.action = `/musteri/${id}`;
                     }
                 });
             });
 
-            // Confirm Delete
-            document.getElementById('confirmDeleteBtn')?.addEventListener('click', function () {
-                const customerId = this.dataset.customerId;
-
-                showToast(`Müşteri #${customerId} başarıyla silindi!`, 'success');
-
-                // Remove row from table
-                const row = document.querySelector(`#customersTable tbody tr[data-id="${customerId}"]`);
-                if (row) {
-                    row.remove();
-
-                    // If no rows left, show message
-                    if (document.querySelectorAll('#customersTable tbody tr').length === 0) {
-                        showToast('Liste boş!', 'info');
-                    }
-                }
-
-                
-            });
+            @if(session('success'))
+                showToast("{{ session('success') }}", 'success');
+            @endif
+            @if($errors->any())
+                @foreach($errors->all() as $error)
+                    showToast("{{ $error }}", 'danger');
+                @endforeach
+            @endif
 
             // Toast Helper Function
             function showToast(message, type = 'success') {

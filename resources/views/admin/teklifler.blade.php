@@ -433,7 +433,7 @@
             </div>
             <div>
                 <div class="modern-stat-label">Toplam Teklif</div>
-                <div class="modern-stat-value">15</div>
+                <div class="modern-stat-value">{{ $toplamTeklif ?? 0 }}</div>
             </div>
         </div>
 
@@ -443,7 +443,7 @@
             </div>
             <div>
                 <div class="modern-stat-label">Onaylanan</div>
-                <div class="modern-stat-value">7</div>
+                <div class="modern-stat-value">{{ $onaylanan ?? 0 }}</div>
             </div>
         </div>
 
@@ -453,7 +453,7 @@
             </div>
             <div>
                 <div class="modern-stat-label">Bekleyen</div>
-                <div class="modern-stat-value">6</div>
+                <div class="modern-stat-value">{{ $bekleyen ?? 0 }}</div>
             </div>
         </div>
 
@@ -463,7 +463,7 @@
             </div>
             <div>
                 <div class="modern-stat-label">Toplam Tutar</div>
-                <div class="modern-stat-value">₺251.5K</div>
+                <div class="modern-stat-value">₺{{ number_format($toplamTutar ?? 0, 2, ',', '.') }}</div>
             </div>
         </div>
     </div>
@@ -531,165 +531,60 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Row 1 -->
+                @forelse($teklifler as $teklif)
                 <tr>
-                    <td class="col-id">#TEK-2026-001</td>
-                    <td class="col-client">Ahmet Yılmaz</td>
-                    <td>Web Tasarım Hizmeti</td>
-                    <td class="col-amount">₺15.000,00</td>
-                    <td>15 Tem 2026</td>
-                    <td><span class="modern-badge badge-pending">Onay Bekliyor</span></td>
+                    <td class="col-id">{{ $teklif->teklif_no }}</td>
+                    <td class="col-client">{{ $teklif->musteri->ad }} {{ $teklif->musteri->soyad }}</td>
+                    <td>{{ $teklif->hizmet_turu }}</td>
+                    <td class="col-amount">₺{{ number_format($teklif->tutar, 2, ',', '.') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($teklif->tarih)->format('d M Y') }}</td>
+                    <td>
+                        @if($teklif->durum == 'approved')
+                            <span class="modern-badge badge-approved">Onaylandı</span>
+                        @elseif($teklif->durum == 'pending')
+                            <span class="modern-badge badge-pending" style="background:#fef3c7; color:#b45309;">Onay Bekliyor</span>
+                        @elseif($teklif->durum == 'draft')
+                            <span class="modern-badge badge-draft">Bekliyor</span>
+                        @elseif($teklif->durum == 'rejected')
+                            <span class="modern-badge" style="background:#fee2e2; color:#b91c1c;">Reddedildi</span>
+                        @elseif($teklif->durum == 'no_response')
+                            <span class="modern-badge" style="background:#f3f4f6; color:#4b5563;">Cevap Yok</span>
+                        @elseif($teklif->durum == 'deal_failed')
+                            <span class="modern-badge" style="background:#ffedd5; color:#c2410c;">Anlaşma Sağlanamadı</span>
+                        @endif
+                    </td>
                     <td>
                         <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-approve" data-bs-toggle="modal" data-bs-target="#approveQuoteModal" title="Onayla"><i class="fa-solid fa-check"></i></button>
+                            <button class="btn-icon btn-icon-view view-quote-btn" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" 
+                                data-client="{{ $teklif->musteri->ad }} {{ $teklif->musteri->soyad }}"
+                                data-service="{{ $teklif->hizmet_turu }}"
+                                data-amount="₺{{ number_format($teklif->tutar, 2, ',', '.') }}"
+                                data-date="{{ \Carbon\Carbon::parse($teklif->tarih)->format('d M Y') }}"
+                                data-desc="{{ $teklif->aciklama }}"
+                                title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
+                            
+                            @if($teklif->durum != 'approved')
+                            <button class="btn-icon btn-icon-approve approve-quote-btn" data-bs-toggle="modal" data-bs-target="#approveQuoteModal" data-id="{{ $teklif->id }}" title="Onayla"><i class="fa-solid fa-check"></i></button>
+                            @endif
+                            
+                            <button class="btn-icon btn-icon-edit edit-quote-btn" data-bs-toggle="modal" data-bs-target="#editQuoteModal" 
+                                data-id="{{ $teklif->id }}"
+                                data-musteri_id="{{ $teklif->musteri_id }}"
+                                data-hizmet="{{ $teklif->hizmet_turu }}"
+                                data-tutar="{{ $teklif->tutar }}"
+                                data-durum="{{ $teklif->durum }}"
+                                data-aciklama="{{ $teklif->aciklama }}"
+                                title="Düzenle"><i class="fa-solid fa-pen"></i></button>
+                                
+                            <button class="btn-icon delete-quote-btn" style="background:#fef2f2; color:#ef4444;" data-bs-toggle="modal" data-bs-target="#deleteQuoteModal" data-id="{{ $teklif->id }}" title="Sil"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </td>
                 </tr>
-
-                <!-- Row 2 -->
+                @empty
                 <tr>
-                    <td class="col-id">#TEK-2026-002</td>
-                    <td class="col-client">Ayşe Demir</td>
-                    <td>Mobil Uygulama Geliştirme</td>
-                    <td class="col-amount">₺45.000,00</td>
-                    <td>18 Tem 2026</td>
-                    <td><span class="modern-badge badge-approved">Onaylandı</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-edit" data-bs-toggle="modal" data-bs-target="#editQuoteModal" title="Düzenle"><i class="fa-solid fa-pen"></i></button>
-                        </div>
-                    </td>
+                    <td colspan="7" class="text-center text-muted p-4">Kayıtlı teklif bulunamadı.</td>
                 </tr>
-
-                <!-- Row 3 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-003</td>
-                    <td class="col-client">Mehmet Kaya</td>
-                    <td>Dijital Pazarlama Paketi</td>
-                    <td class="col-amount">₺25.000,00</td>
-                    <td>20 Tem 2026</td>
-                    <td><span class="modern-badge badge-draft">Bekliyor</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-approve" data-bs-toggle="modal" data-bs-target="#approveQuoteModal" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Row 4 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-004</td>
-                    <td class="col-client">Fatma Şahin</td>
-                    <td>Sosyal Medya Yönetimi</td>
-                    <td class="col-amount">₺8.500,00</td>
-                    <td>21 Tem 2026</td>
-                    <td><span class="modern-badge badge-approved">Onaylandı</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-edit" data-bs-toggle="modal" data-bs-target="#editQuoteModal" title="Düzenle"><i class="fa-solid fa-pen"></i></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Row 5 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-005</td>
-                    <td class="col-client">Can Arslan</td>
-                    <td>E-Ticaret Kurulumu</td>
-                    <td class="col-amount">₺35.000,00</td>
-                    <td>22 Tem 2026</td>
-                    <td><span class="modern-badge badge-pending">Onay Bekliyor</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-approve" data-bs-toggle="modal" data-bs-target="#approveQuoteModal" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Row 6 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-006</td>
-                    <td class="col-client">Zeynep Öztürk</td>
-                    <td>Kurumsal Web Sitesi</td>
-                    <td class="col-amount">₺22.500,00</td>
-                    <td>23 Tem 2026</td>
-                    <td><span class="modern-badge badge-approved">Onaylandı</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-edit" data-bs-toggle="modal" data-bs-target="#editQuoteModal" title="Düzenle"><i class="fa-solid fa-pen"></i></button>
-                        </div>
-                    </td>
-                </tr>
-                
-                <!-- Row 7 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-007</td>
-                    <td class="col-client">Burak Yıldız</td>
-                    <td>SEO Optimizasyonu</td>
-                    <td class="col-amount">₺12.000,00</td>
-                    <td>24 Tem 2026</td>
-                    <td><span class="modern-badge badge-pending">Onay Bekliyor</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-approve" data-bs-toggle="modal" data-bs-target="#approveQuoteModal" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Row 8 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-008</td>
-                    <td class="col-client">Selin Aydın</td>
-                    <td>Kurumsal Kimlik Tasarımı</td>
-                    <td class="col-amount">₺18.000,00</td>
-                    <td>25 Tem 2026</td>
-                    <td><span class="modern-badge badge-approved">Onaylandı</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-edit" data-bs-toggle="modal" data-bs-target="#editQuoteModal" title="Düzenle"><i class="fa-solid fa-pen"></i></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Row 9 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-009</td>
-                    <td class="col-client">Oğuz Çelik</td>
-                    <td>Logo Tasarımı</td>
-                    <td class="col-amount">₺5.500,00</td>
-                    <td>26 Tem 2026</td>
-                    <td><span class="modern-badge badge-draft">Bekliyor</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-approve" data-bs-toggle="modal" data-bs-target="#approveQuoteModal" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        </div>
-                    </td>
-                </tr>
-
-                <!-- Row 10 -->
-                <tr>
-                    <td class="col-id">#TEK-2026-010</td>
-                    <td class="col-client">Dilara Koç</td>
-                    <td>Kurumsal Web Sitesi</td>
-                    <td class="col-amount">₺38.000,00</td>
-                    <td>27 Tem 2026</td>
-                    <td><span class="modern-badge badge-approved">Onaylandı</span></td>
-                    <td>
-                        <div class="action-group">
-                            <button class="btn-icon btn-icon-view" data-bs-toggle="modal" data-bs-target="#viewQuoteModal" title="Görüntüle"><i class="fa-solid fa-eye"></i></button>
-                            <button class="btn-icon btn-icon-edit" data-bs-toggle="modal" data-bs-target="#editQuoteModal" title="Düzenle"><i class="fa-solid fa-pen"></i></button>
-                        </div>
-                    </td>
-                </tr>
+                @endforelse
             </tbody>
         </table>
 
@@ -718,34 +613,36 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" style="padding: 1.5rem;">
-                <form id="newQuoteForm">
+                <form id="newQuoteForm" action="{{ route('teklifler.store') }}" method="POST">
+                    @csrf
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Müşteri</label>
-                            <select class="form-select" style="border-radius: 10px; background: #f8fafc;" required>
+                            <select name="musteri_id" class="form-select" style="border-radius: 10px; background: #f8fafc;" required>
                                 <option value="">Müşteri Seçin...</option>
-                                <option>Ahmet Yılmaz</option>
-                                <option>Ayşe Demir</option>
+                                @foreach($musteriler as $musteri)
+                                    <option value="{{ $musteri->id }}">{{ $musteri->ad }} {{ $musteri->soyad }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Hizmet Türü</label>
-                            <input type="text" class="form-control" style="border-radius: 10px; background: #f8fafc;" placeholder="Örn: Web Tasarım" required>
+                            <input type="text" name="hizmet_turu" class="form-control" style="border-radius: 10px; background: #f8fafc;" placeholder="Örn: Web Tasarım" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Tutar (₺)</label>
-                            <input type="number" class="form-control" style="border-radius: 10px; background: #f8fafc;" placeholder="0,00" required>
+                            <input type="number" step="0.01" name="tutar" class="form-control" style="border-radius: 10px; background: #f8fafc;" placeholder="0,00" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Tarih</label>
-                            <input type="date" class="form-control" style="border-radius: 10px; background: #f8fafc;" required>
+                            <input type="date" name="tarih" class="form-control" style="border-radius: 10px; background: #f8fafc;" required>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" style="font-weight: 600; color: #475569;">Teklif Detayları</label>
-                        <textarea class="form-control" rows="4" style="border-radius: 10px; background: #f8fafc;" placeholder="Teklif içeriğini buraya yazın..."></textarea>
+                        <label class="form-label" style="font-weight: 600; color: #475569;">Teklif Detayları (Opsiyonel)</label>
+                        <textarea name="aciklama" class="form-control" rows="4" style="border-radius: 10px; background: #f8fafc;" placeholder="Teklif içeriğini buraya yazın..."></textarea>
                     </div>
                 </form>
             </div>
@@ -769,25 +666,25 @@
             <div class="modal-body" style="padding: 1.5rem;">
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Müşteri</label>
-                    <p class="fw-bold mb-0">Ahmet Yılmaz</p>
+                    <p class="fw-bold mb-0" id="viewClientName"></p>
                 </div>
                 <div class="mb-3">
                     <label class="form-label text-muted small fw-bold">Hizmet Türü</label>
-                    <p class="mb-0">Web Tasarım Hizmeti</p>
+                    <p class="mb-0" id="viewService"></p>
                 </div>
                 <div class="row mb-3">
                     <div class="col-6">
                         <label class="form-label text-muted small fw-bold">Tutar</label>
-                        <p class="fw-bold text-dark mb-0">₺15.000,00</p>
+                        <p class="fw-bold text-dark mb-0" id="viewAmount"></p>
                     </div>
                     <div class="col-6">
                         <label class="form-label text-muted small fw-bold">Tarih</label>
-                        <p class="mb-0">15 Tem 2026</p>
+                        <p class="mb-0" id="viewDate"></p>
                     </div>
                 </div>
                 <div>
                     <label class="form-label text-muted small fw-bold">Açıklama</label>
-                    <p class="bg-light p-3 rounded" style="font-size: 0.95rem;">Kurumsal web sitesi tasarımı, mobil uyumluluk ve temel SEO optimizasyonu dahil.</p>
+                    <p class="bg-light p-3 rounded" style="font-size: 0.95rem;" id="viewDesc"></p>
                 </div>
             </div>
         </div>
@@ -803,35 +700,44 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" style="padding: 1.5rem;">
-                <form id="editQuoteForm">
+                <form id="editQuoteForm" method="POST">
+                    @csrf
+                    @method('PUT')
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Müşteri</label>
-                            <input type="text" class="form-control" style="border-radius: 10px; background: #f8fafc;" value="Ayşe Demir" required>
+                            <select name="musteri_id" id="editMusteriId" class="form-select" style="border-radius: 10px; background: #f8fafc;" required>
+                                <option value="">Müşteri Seçin...</option>
+                                @foreach($musteriler as $musteri)
+                                    <option value="{{ $musteri->id }}">{{ $musteri->ad }} {{ $musteri->soyad }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Hizmet Türü</label>
-                            <input type="text" class="form-control" style="border-radius: 10px; background: #f8fafc;" value="Mobil Uygulama Geliştirme" required>
+                            <input type="text" name="hizmet_turu" id="editHizmet" class="form-control" style="border-radius: 10px; background: #f8fafc;" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Tutar (₺)</label>
-                            <input type="number" class="form-control" style="border-radius: 10px; background: #f8fafc;" value="45000" required>
+                            <input type="number" step="0.01" name="tutar" id="editTutar" class="form-control" style="border-radius: 10px; background: #f8fafc;" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" style="font-weight: 600; color: #475569;">Durum</label>
-                            <select class="form-select" style="border-radius: 10px; background: #f8fafc;">
-                                <option>Bekliyor</option>
-                                <option>Onay Bekliyor</option>
-                                <option selected>Onaylandı</option>
-                                <option>Reddedildi</option>
+                            <select name="durum" id="editDurum" class="form-select" style="border-radius: 10px; background: #f8fafc;">
+                                <option value="draft">Bekliyor</option>
+                                <option value="pending">Onay Bekliyor</option>
+                                <option value="approved">Onaylandı</option>
+                                <option value="rejected">Reddedildi</option>
+                                <option value="no_response">Cevap Yok</option>
+                                <option value="deal_failed">Anlaşma Sağlanamadı</option>
                             </select>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label" style="font-weight: 600; color: #475569;">Açıklama</label>
-                        <textarea class="form-control" rows="3" style="border-radius: 10px; background: #f8fafc;">iOS ve Android için native mobil uygulama geliştirme süreci.</textarea>
+                        <textarea name="aciklama" id="editAciklama" class="form-control" rows="3" style="border-radius: 10px; background: #f8fafc;"></textarea>
                     </div>
                 </form>
             </div>
@@ -853,8 +759,82 @@
                 <p class="text-muted small mb-4">Bu teklifi onaylamak istediğinize emin misiniz?</p>
                 <div class="d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 10px; font-weight: 600;">Vazgeç</button>
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" style="background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 10px; font-weight: 600;">Evet, Onayla</button>
+                    <form id="approveQuoteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success" style="background: linear-gradient(135deg, #22c55e, #16a34a); border: none; border-radius: 10px; font-weight: 600;">Evet, Onayla</button>
+                    </form>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Quote Modal -->
+<div class="modal fade" id="deleteQuoteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+            <div class="modal-body text-center" style="padding: 2rem 1.5rem;">
+                <i class="fa-solid fa-trash fa-3x mb-3" style="color: #ef4444;"></i>
+                <h5 class="fw-bold mb-2">Teklifi Sil</h5>
+                <p class="text-muted small mb-4">Bu teklifi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="border-radius: 10px; font-weight: 600;">Vazgeç</button>
+                    <form id="deleteQuoteForm" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" style="background: linear-gradient(135deg, #ef4444, #dc2626); border: none; border-radius: 10px; font-weight: 600;">Evet, Sil</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // View Quote
+        document.querySelectorAll('.view-quote-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.getElementById('viewClientName').textContent = this.dataset.client;
+                document.getElementById('viewService').textContent = this.dataset.service;
+                document.getElementById('viewAmount').textContent = this.dataset.amount;
+                document.getElementById('viewDate').textContent = this.dataset.date;
+                document.getElementById('viewDesc').textContent = this.dataset.desc || '-';
+            });
+        });
+
+        // Edit Quote
+        document.querySelectorAll('.edit-quote-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = document.getElementById('editQuoteForm');
+                form.action = `/teklifler/${this.dataset.id}`;
+                
+                document.getElementById('editMusteriId').value = this.dataset.musteri_id;
+                document.getElementById('editHizmet').value = this.dataset.hizmet;
+                document.getElementById('editTutar').value = this.dataset.tutar;
+                document.getElementById('editDurum').value = this.dataset.durum;
+                document.getElementById('editAciklama').value = this.dataset.aciklama;
+            });
+        });
+
+        // Approve Quote
+        document.querySelectorAll('.approve-quote-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = document.getElementById('approveQuoteForm');
+                form.action = `/teklifler/${this.dataset.id}/onayla`;
+            });
+        });
+
+        // Delete Quote
+        document.querySelectorAll('.delete-quote-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const form = document.getElementById('deleteQuoteForm');
+                form.action = `/teklifler/${this.dataset.id}`;
+            });
+        });
+    });
+</script>
             </div>
         </div>
     </div>

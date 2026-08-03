@@ -397,4 +397,51 @@
 
     </div>
 
+
+    <script>
+        function showTab(tabId) {
+            // Hide all sections
+            document.querySelectorAll('.settings-section').forEach(section => {
+                section.classList.remove('active');
+                section.style.display = 'none';
+            });
+            // Show target section
+            const target = document.getElementById(tabId);
+            if (target) {
+                target.classList.add('active');
+                target.style.display = 'block';
+            }
+
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn-settings').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        // Initialize tabs on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.settings-section').forEach(section => {
+                if (!section.classList.contains('active')) {
+                    section.style.display = 'none';
+                }
+            });
+        });
+
+        function selectNotificationCategory(element, category) {
+            document.querySelectorAll('.notification-category').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function selectPreferenceCategory(element, category) {
+            document.querySelectorAll('.preference-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function selectThemeOption(element, theme) {
+            document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+        }
+    </script>
+
 @include('layouts.footer')

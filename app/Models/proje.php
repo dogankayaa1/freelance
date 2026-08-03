@@ -15,8 +15,11 @@ class proje extends Model
         'bitis',
         'butce',
         'oncelik'
-
-
-
     ];
+
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'proje_id');
+    }
 }

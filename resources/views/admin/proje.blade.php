@@ -147,14 +147,11 @@
         color:#334155; vertical-align:middle; font-weight:500;
         transition:background .2s;
     }
-    .modern-table tbody tr { position:relative; transition:all .25s; }
+    .modern-table tbody tr { transition:all .25s; }
     .modern-table tbody tr:hover { background:#fafbff; }
     .modern-table tbody tr:hover td { color:#0f172a; }
-    .modern-table tbody tr::before {
-        content:''; position:absolute; left:0; top:0; bottom:0;
-        width:3px; background:#3b82f6; opacity:0; transition:opacity .3s;
-    }
-    .modern-table tbody tr:hover::before { opacity:1; }
+    .modern-table tbody td:first-child { border-left: 3px solid transparent; transition: border-color .3s; }
+    .modern-table tbody tr:hover td:first-child { border-left-color: #3b82f6; }
 
     .project-name-cell strong { font-size:1rem; color:#0f172a; }
     .project-name-cell small  { color:#94a3b8; font-size:.82rem; }
@@ -193,6 +190,8 @@
         display:inline-flex; align-items:center; justify-content:center;
         cursor:pointer; font-size:1rem; transition:all .25s;
     }
+    .tbl-btn-view   { background:#f0fdf4; color:#15803d; }
+    .tbl-btn-view:hover   { background:#15803d; color:#fff; transform:translateY(-3px); box-shadow:0 5px 12px rgba(21,128,61,.3); }
     .tbl-btn-edit   { background:#f0f9ff; color:#0284c7; }
     .tbl-btn-edit:hover   { background:#0284c7; color:#fff; transform:translateY(-3px); box-shadow:0 5px 12px rgba(2,132,199,.3); }
     .tbl-btn-delete { background:#fff1f2; color:#e11d48; }
@@ -605,8 +604,10 @@
             projectsTableBody.innerHTML = filtered.map(p => `
                 <tr>
                     <td class="project-name-cell">
-                        <strong>${esc(p.proje_adi)}</strong><br>
-                        <small>${esc(p.aciklama || '')}</small>
+                        <a href="/proje/${p.id}/detay" style="text-decoration: none; color: inherit;">
+                            <strong>${esc(p.proje_adi)}</strong><br>
+                            <small>${esc(p.aciklama || '')}</small>
+                        </a>
                     </td>
                     <td>${esc(p.musteri)}</td>
                     <td><span class="status-pill ${statusClass(p.durum)}">${statusLabel(p.durum)}</span></td>
@@ -616,6 +617,7 @@
                     <td style="font-weight:700;color:#0f172a;">₺${parseInt(p.butce||0).toLocaleString('tr-TR')}</td>
                     <td>
                         <div class="tbl-actions">
+                            <a href="/proje/${p.id}/detay" class="tbl-btn tbl-btn-view" title="Detaylar"><i class="fa-solid fa-eye"></i></a>
                             <button class="tbl-btn tbl-btn-edit" onclick="editProject(${p.id})" title="Düzenle"><i class="fa-solid fa-pen"></i></button>
                             <button class="tbl-btn tbl-btn-delete" onclick="deleteProject(${p.id})" title="Sil"><i class="fa-solid fa-trash"></i></button>
                         </div>

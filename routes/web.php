@@ -19,7 +19,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/proje', [ProjeController::class, 'index'])->name('proje.index');
     Route::put('/proje/{proje}', [ProjeController::class, 'update'])->name('proje.update');
     Route::delete('/proje/{proje}', [ProjeController::class, 'destroy'])->name('proje.destroy');
-    Route::get('/proje-detay', function(){return view('admin.proje-detay');});
+    Route::get('/proje/{proje}/detay', [ProjeController::class, 'show'])->name('proje.show');
+    Route::post('/proje/{proje}/tasks', [App\Http\Controllers\TaskController::class, 'store'])->name('tasks.store');
+    Route::put('/tasks/{task}', [App\Http\Controllers\TaskController::class, 'update'])->name('tasks.update');
+    Route::delete('/tasks/{task}', [App\Http\Controllers\TaskController::class, 'destroy'])->name('tasks.destroy');
     Route::get('/teklifler', function(){return view('admin.teklifler');});
     Route::get('/finans', function(){return view('admin.finans');});
     Route::get('/ayarlar', function(){return view('admin.ayarlar');});

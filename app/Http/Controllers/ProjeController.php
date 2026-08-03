@@ -34,10 +34,10 @@ class ProjeController extends Controller
         'proje_adi' => 'required|string',
         'musteri' => 'required|string',
         'durum' => 'required|string',
-        'aciklama' => 'required|string',
+        'aciklama' => 'nullable|string',
         'baslangic' => 'required|date',
         'bitis' => 'required|date',
-        'butce' => 'required|numeric',
+        'butce' => 'nullable|numeric',
         'oncelik' => 'required|string',
     ]);
 
@@ -52,7 +52,8 @@ class ProjeController extends Controller
      */
     public function show(proje $proje)
     {
-        //
+        $tasks = $proje->tasks()->get();
+        return view('admin.proje-detay', compact('proje', 'tasks'));
     }
 
     /**
@@ -72,10 +73,10 @@ class ProjeController extends Controller
             'proje_adi' => 'required|string',
             'musteri' => 'required|string',
             'durum' => 'required|string',
-            'aciklama' => 'required|string',
+            'aciklama' => 'nullable|string',
             'baslangic' => 'required|date',
             'bitis' => 'required|date',
-            'butce' => 'required|numeric',
+            'butce' => 'nullable|numeric',
             'oncelik' => 'required|string',
         ]);
         
